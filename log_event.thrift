@@ -20,5 +20,5 @@ struct logEvent {
 }
 
 service LogIngestionService {
-    void sendLog(1: LogEvent log)
+    void sendLog(1: logEvent log)
 }
