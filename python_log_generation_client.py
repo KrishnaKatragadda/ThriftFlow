@@ -39,7 +39,7 @@ def generate_random_log_event():
         message=fake.sentence(),
         environment=random.choice(["dev", "qa", "prod"]),
         user_id=f"user-{fake.random_int(min=1000, max=9999)}",
-        metadata=metadata
+        metadata=metadata,
         host = random.choice(host) ## sending the new optional field towards a server which is 
         ## not expecting it. It is NEW CLIENT --> OLD SERVER-- BACKWARD COMPATIBILITY
     )
