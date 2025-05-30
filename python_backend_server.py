@@ -12,6 +12,10 @@ class LogEventHandler:
         print(f"[{log.timestamp}] {log.log_level} - {log.message} (Service: {log.service_name})")
         if log.metadata:
             print(f"Metadata: {log.metadata}")
+        if log.host:
+            print(f"incoming host is: {log.host}")
+        else:
+            print("not HOST N/A")
         print("-" * 40)
 
 if __name__ == "__main__":
