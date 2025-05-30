@@ -2,7 +2,7 @@ from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 from gen_py.log_event import LogIngestionService
-from gen_py.log_event.ttypes import LogEvent, LogMetadata
+from gen_py.log_event.ttypes import logEvent, LogMetaData
 
 from faker import Faker
 import random
@@ -15,14 +15,14 @@ services = ["auth-service", "order-service", "payment-service", "inventory-servi
 endpoints = ["/api/login", "/api/order", "/api/pay", "/api/stock"]
 
 def generate_random_log_event():
-    metadata = LogMetadata(
+    metadata = LogMetaData(
         request_id=fake.uuid4(),
         ip_address=fake.ipv4(),
         http_method=random.choice(["GET", "POST", "PUT", "DELETE"]),
         endpoint=random.choice(endpoints)
     )
 
-    log = LogEvent(
+    log = logEvent(
         timestamp=int(time.time() * 1000),
         service_name=random.choice(services),
         log_level=random.choice(log_levels),
@@ -43,8 +43,9 @@ def main():
     transport.open()
 
     # Generate and send 10 synthetic logs
-    for i in range(10):
+    for i in range(15):
         log = generate_random_log_event()
+        # print(log)
         client.sendLog(log)
         print(f"✅ Sent log {i+1}: {log.service_name} - {log.log_level}")
         time.sleep(0.5)  # optional: wait a bit to simulate real traffic
