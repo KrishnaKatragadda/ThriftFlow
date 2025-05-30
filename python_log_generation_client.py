@@ -13,6 +13,16 @@ fake = Faker()
 log_levels = ["DEBUG", "INFO", "WARN", "ERROR"]
 services = ["auth-service", "order-service", "payment-service", "inventory-service"]
 endpoints = ["/api/login", "/api/order", "/api/pay", "/api/stock"]
+host =["web-01.prod.us-west",
+    "api-02.dev.us-east",
+    "db-03.stage.eu-central",
+    "batch-04.prod.ap-south",
+    "analytics-05.qa.us-west",
+    "stream-06.dev.us-central",
+    "ingest-07.prod.eu-west",
+    "cache-08.stage.us-east",
+    "proxy-09.prod.ap-northeast",
+    "service-10.qa.eu-north"]
 
 def generate_random_log_event():
     metadata = LogMetaData(
@@ -30,6 +40,8 @@ def generate_random_log_event():
         environment=random.choice(["dev", "qa", "prod"]),
         user_id=f"user-{fake.random_int(min=1000, max=9999)}",
         metadata=metadata
+        host = random.choice(host) ## sending the new optional field towards a server which is 
+        ## not expecting it. It is NEW CLIENT --> OLD SERVER-- BACKWARD COMPATIBILITY
     )
 
     return log
@@ -45,7 +57,7 @@ def main():
     # Generate and send 10 synthetic logs
     for i in range(15):
         log = generate_random_log_event()
-        # print(log)
+        print(log)
         client.sendLog(log)
         print(f"✅ Sent log {i+1}: {log.service_name} - {log.log_level}")
         time.sleep(0.5)  # optional: wait a bit to simulate real traffic

@@ -17,6 +17,8 @@ struct logEvent {
     5: optional string environment
     6: optional string user_id
     7: optional LogMetaData metadata 
+    8: optional string host   // adding a new field to the schema. New client will send this and new server will expect this.
+    // testing the schema evolution
 }
 
 service LogIngestionService {

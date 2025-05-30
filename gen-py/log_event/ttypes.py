@@ -116,11 +116,12 @@ class logEvent(object):
      - environment
      - user_id
      - metadata
+     - host
 
     """
 
 
-    def __init__(self, timestamp=None, service_name=None, log_level=None, message=None, environment=None, user_id=None, metadata=None,):
+    def __init__(self, timestamp=None, service_name=None, log_level=None, message=None, environment=None, user_id=None, metadata=None, host=None,):
         self.timestamp = timestamp
         self.service_name = service_name
         self.log_level = log_level
@@ -128,6 +129,7 @@ class logEvent(object):
         self.environment = environment
         self.user_id = user_id
         self.metadata = metadata
+        self.host = host
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -174,6 +176,11 @@ class logEvent(object):
                     self.metadata.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.STRING:
+                    self.host = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -211,6 +218,10 @@ class logEvent(object):
         if self.metadata is not None:
             oprot.writeFieldBegin('metadata', TType.STRUCT, 7)
             self.metadata.write(oprot)
+            oprot.writeFieldEnd()
+        if self.host is not None:
+            oprot.writeFieldBegin('host', TType.STRING, 8)
+            oprot.writeString(self.host.encode('utf-8') if sys.version_info[0] == 2 else self.host)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -254,6 +265,7 @@ logEvent.thrift_spec = (
     (5, TType.STRING, 'environment', 'UTF8', None, ),  # 5
     (6, TType.STRING, 'user_id', 'UTF8', None, ),  # 6
     (7, TType.STRUCT, 'metadata', [LogMetaData, None], None, ),  # 7
+    (8, TType.STRING, 'host', 'UTF8', None, ),  # 8
 )
 fix_spec(all_structs)
 del all_structs
